@@ -7,6 +7,13 @@ Promise.prototype.returns = function(value) {
   });
 };
 
+Promise.prototype.tap = function(method) {
+  return this.then(function(value){
+    method(value);
+    return value;
+  });
+};
+
 Promise.prototype.invoke = function(method) {
   var args = Array.prototype.slice(arguments, 1);
 
@@ -14,7 +21,6 @@ Promise.prototype.invoke = function(method) {
     return value[method].apply(value, args);
   }, undefined, 'invoke: ' + method + ' with: ' + args);
 };
-
 
 Promise.prototype.map = function(mapFn) {
   return this.then(function(values) {
