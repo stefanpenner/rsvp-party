@@ -44,9 +44,11 @@ Promise.prototype.guard = function(test) {
   return guarded;
 };
 
-RSVP.configure('get', function(obj, property) {
-  return obj[property];
-});
+if (RSVP.configure('get') === undefined) {
+  RSVP.configure('get', function(obj, property) {
+    return obj[property];
+  });
+}
 
 Promise.prototype.get = function(property) {
   return this.then(function(obj) {
@@ -54,11 +56,13 @@ Promise.prototype.get = function(property) {
   });
 };
 
-RSVP.configure('set', function(obj, property, value) {
-  obj[property] = value;
+if (RSVP.configure('set') === undefined) {
+  RSVP.configure('set', function(obj, property, value) {
+    obj[property] = value;
 
-  return value;
-});
+    return value;
+  });
+}
 
 Promise.prototype.set = function(property, value) {
   return this.then(function(obj) {
