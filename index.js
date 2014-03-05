@@ -70,7 +70,8 @@ Promise.prototype.set = function(property, value) {
   });
 };
 
-Promise.sequence = function(tasks) {
+// please note, these must be array of callables which return promises
+RSVP.sequence = Promise.sequence = function(tasks) {
   var length = tasks.length;
   var current = Promise.resolve();
   var results = new Array(length);
@@ -80,4 +81,23 @@ Promise.sequence = function(tasks) {
   }
 
   return Promise.all(results);
+};
+
+
+// please note, these must be an object of callables which return promises
+// also dependingon the implementation this may be entirely non-deterministic
+// what better way to have a party
+RSVP.hashSequence = function(tasks) {
+  var keys = Object.keys(tasks);
+  var length = keys.length;
+  var current = Promise.resolve();
+  var taskName;
+  var results = { };
+
+  for (var i = 0; i < length; ++i) {
+    taskName = keys[i];
+    current = results[taskName] = current.then(tasks[taskName]);
+  }
+
+  return RSVP.hash(results);
 };
