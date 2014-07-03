@@ -33,5 +33,5 @@ Running Tests:
 --------------
 
 ```
-testem
+npm test
 ```

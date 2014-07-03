@@ -1,5 +1,20 @@
-var RSVP = require('rsvp');
-var Promise = RSVP.Promise;
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.RSVP=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+"use strict";
+var Promise = _dereq_("./rsvp-party/promise")["default"] || _dereq_("./rsvp-party/promise");
+var RSVP = _dereq_("./rsvp-party/rsvp")["default"] || _dereq_("./rsvp-party/rsvp");
+
+var Party = {
+  Promise: Promise,
+  RSVP: RSVP
+};
+
+exports.Party = Party;
+},{"./rsvp-party/promise":2,"./rsvp-party/rsvp":3}],2:[function(_dereq_,module,exports){
+"use strict";
+var RSVP = _dereq_("./rsvp")["default"] || _dereq_("./rsvp");
+
+function Promise() {}
+exports["default"] = Promise;
 
 Promise.prototype.returns = function(value) {
   return this.then(function() {
@@ -43,35 +58,15 @@ Promise.prototype.guard = function(test) {
 
   return guarded;
 };
+},{"./rsvp":3}],3:[function(_dereq_,module,exports){
+"use strict";
+var Promise = _dereq_("./promise")["default"] || _dereq_("./promise");
 
-if (RSVP.configure('get') === undefined) {
-  RSVP.configure('get', function(obj, property) {
-    return obj[property];
-  });
-}
-
-Promise.prototype.get = function(property) {
-  return this.then(function(obj) {
-    return RSVP.configure('get')(obj, property);
-  });
-};
-
-if (RSVP.configure('set') === undefined) {
-  RSVP.configure('set', function(obj, property, value) {
-    obj[property] = value;
-
-    return value;
-  });
-}
-
-Promise.prototype.set = function(property, value) {
-  return this.then(function(obj) {
-    return RSVP.configure('set')(obj, property, value);
-  });
-};
+function RSVP() { };
+exports["default"] = RSVP;
 
 // please note, these must be array of callables which return promises
-RSVP.sequence = Promise.sequence = function(tasks) {
+RSVP.sequence = function(tasks) {
   var length = tasks.length;
   var current = Promise.resolve();
   var results = new Array(length);
@@ -107,7 +102,7 @@ RSVP.hashSequence = function(tasks) {
 //Returns a promise.
 RSVP.promiseWhile = function(condition, body) {
   return new RSVP.Promise(function(resolve,reject){
-  
+
     function loop() {
       RSVP.Promise.resolve(condition()).then(function(result){
         // When the result of calling `condition` is no longer true, we are done.
@@ -124,3 +119,6 @@ RSVP.promiseWhile = function(condition, body) {
     loop();
   });
 };
+},{"./promise":2}]},{},[1])
+(1)
+});
