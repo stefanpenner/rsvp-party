@@ -1,8 +1,16 @@
 "use strict";
-var RSVP = require("./rsvp")["default"] || require("./rsvp");
+var _RSVP = require("rsvp")["default"] || require("rsvp");
 
-function Promise() {}
-exports["default"] = Promise;
+var _Promise = _RSVP.Promise;
+
+function Promise(resolver, label) {
+  this._superConstructor(resolver, label);
+}
+
+Promise.prototype = Object.create(_Promise.prototype);
+Promise.prototype.constructor = Promise;
+Promise.prototype._superConstructor = _Promise;
+Promise.__proto__ = _Promise;
 
 Promise.prototype.returns = function(value) {
   return this.then(function() {
@@ -26,14 +34,18 @@ Promise.prototype.invoke = function(method) {
 };
 
 Promise.prototype.map = function(mapFn) {
+  var Constructor = this.constructor;
+
   return this.then(function(values) {
-    return RSVP.map(values, mapFn);
+    return Constructor.map(values, mapFn);
   });
 };
 
 Promise.prototype.filter = function(mapFn) {
+  var Constructor = this.constructor;
+
   return this.then(function(values) {
-    return RSVP.filter(values, mapFn);
+    return Constructor.filter(values, mapFn);
   });
 };
 
@@ -46,3 +58,5 @@ Promise.prototype.guard = function(test) {
 
   return guarded;
 };
+
+exports["default"] = Promise;

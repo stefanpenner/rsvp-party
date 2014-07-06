@@ -1,5 +1,5 @@
-describe('RSVP.Party', function() {
+describe('RSVPParty', function() {
   it('should be defined', function() {
-    expect(RSVP.Party).to.exist;
+    expect(RSVPParty).to.exist;
   });
 })

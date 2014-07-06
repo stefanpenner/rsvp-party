@@ -1,20 +1,24 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.RSVP=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.RSVPParty=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 "use strict";
 var Promise = _dereq_("./rsvp-party/promise")["default"] || _dereq_("./rsvp-party/promise");
 var RSVP = _dereq_("./rsvp-party/rsvp")["default"] || _dereq_("./rsvp-party/rsvp");
 
-var Party = {
-  Promise: Promise,
-  RSVP: RSVP
-};
-
-exports.Party = Party;
+exports.Promise = Promise;
+exports.RSVP = RSVP;
 },{"./rsvp-party/promise":2,"./rsvp-party/rsvp":3}],2:[function(_dereq_,module,exports){
 "use strict";
-var RSVP = _dereq_("./rsvp")["default"] || _dereq_("./rsvp");
+var _RSVP = window.RSVP["default"] || window.RSVP;
 
-function Promise() {}
-exports["default"] = Promise;
+var _Promise = _RSVP.Promise;
+
+function Promise(resolver, label) {
+  this._superConstructor(resolver, label);
+}
+
+Promise.prototype = Object.create(_Promise.prototype);
+Promise.prototype.constructor = Promise;
+Promise.prototype._superConstructor = _Promise;
+Promise.__proto__ = _Promise;
 
 Promise.prototype.returns = function(value) {
   return this.then(function() {
@@ -38,14 +42,18 @@ Promise.prototype.invoke = function(method) {
 };
 
 Promise.prototype.map = function(mapFn) {
+  var Constructor = this.constructor;
+
   return this.then(function(values) {
-    return RSVP.map(values, mapFn);
+    return Constructor.map(values, mapFn);
   });
 };
 
 Promise.prototype.filter = function(mapFn) {
+  var Constructor = this.constructor;
+
   return this.then(function(values) {
-    return RSVP.filter(values, mapFn);
+    return Constructor.filter(values, mapFn);
   });
 };
 
@@ -58,7 +66,9 @@ Promise.prototype.guard = function(test) {
 
   return guarded;
 };
-},{"./rsvp":3}],3:[function(_dereq_,module,exports){
+
+exports["default"] = Promise;
+},{}],3:[function(_dereq_,module,exports){
 "use strict";
 var Promise = _dereq_("./promise")["default"] || _dereq_("./promise");
 
@@ -66,7 +76,7 @@ function RSVP() { };
 exports["default"] = RSVP;
 
 // please note, these must be array of callables which return promises
-RSVP.sequence = function(tasks) {
+RSVP.sequence = Promise.sequence = function(tasks) {
   var length = tasks.length;
   var current = Promise.resolve();
   var results = new Array(length);
@@ -77,7 +87,6 @@ RSVP.sequence = function(tasks) {
 
   return Promise.all(results);
 };
-
 
 // please note, these must be an object of callables which return promises
 // also dependingon the implementation this may be entirely non-deterministic

@@ -5,10 +5,6 @@ define(
     var Promise = __dependency1__["default"] || __dependency1__;
     var RSVP = __dependency2__["default"] || __dependency2__;
 
-    var Party = {
-      Promise: Promise,
-      RSVP: RSVP
-    };
-
-    __exports__.Party = Party;
+    __exports__.Promise = Promise;
+    __exports__.RSVP = RSVP;
   });

@@ -1,11 +1,19 @@
 define(
-  ["./rsvp","exports"],
+  ["rsvp","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var RSVP = __dependency1__["default"] || __dependency1__;
+    var _RSVP = __dependency1__["default"] || __dependency1__;
 
-    function Promise() {}
-    __exports__["default"] = Promise;
+    var _Promise = _RSVP.Promise;
+
+    function Promise(resolver, label) {
+      this._superConstructor(resolver, label);
+    }
+
+    Promise.prototype = Object.create(_Promise.prototype);
+    Promise.prototype.constructor = Promise;
+    Promise.prototype._superConstructor = _Promise;
+    Promise.__proto__ = _Promise;
 
     Promise.prototype.returns = function(value) {
       return this.then(function() {
@@ -29,14 +37,18 @@ define(
     };
 
     Promise.prototype.map = function(mapFn) {
+      var Constructor = this.constructor;
+
       return this.then(function(values) {
-        return RSVP.map(values, mapFn);
+        return Constructor.map(values, mapFn);
       });
     };
 
     Promise.prototype.filter = function(mapFn) {
+      var Constructor = this.constructor;
+
       return this.then(function(values) {
-        return RSVP.filter(values, mapFn);
+        return Constructor.filter(values, mapFn);
       });
     };
 
@@ -49,4 +61,6 @@ define(
 
       return guarded;
     };
+
+    __exports__["default"] = Promise;
   });

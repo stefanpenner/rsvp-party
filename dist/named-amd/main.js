@@ -5,21 +5,25 @@ define("rsvp-party",
     var Promise = __dependency1__["default"] || __dependency1__;
     var RSVP = __dependency2__["default"] || __dependency2__;
 
-    var Party = {
-      Promise: Promise,
-      RSVP: RSVP
-    };
-
-    __exports__.Party = Party;
+    __exports__.Promise = Promise;
+    __exports__.RSVP = RSVP;
   });
 define("rsvp-party/rsvp-party/promise",
-  ["./rsvp","exports"],
+  ["rsvp","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var RSVP = __dependency1__["default"] || __dependency1__;
+    var _RSVP = __dependency1__["default"] || __dependency1__;
 
-    function Promise() {}
-    __exports__["default"] = Promise;
+    var _Promise = _RSVP.Promise;
+
+    function Promise(resolver, label) {
+      this._superConstructor(resolver, label);
+    }
+
+    Promise.prototype = Object.create(_Promise.prototype);
+    Promise.prototype.constructor = Promise;
+    Promise.prototype._superConstructor = _Promise;
+    Promise.__proto__ = _Promise;
 
     Promise.prototype.returns = function(value) {
       return this.then(function() {
@@ -43,14 +47,18 @@ define("rsvp-party/rsvp-party/promise",
     };
 
     Promise.prototype.map = function(mapFn) {
+      var Constructor = this.constructor;
+
       return this.then(function(values) {
-        return RSVP.map(values, mapFn);
+        return Constructor.map(values, mapFn);
       });
     };
 
     Promise.prototype.filter = function(mapFn) {
+      var Constructor = this.constructor;
+
       return this.then(function(values) {
-        return RSVP.filter(values, mapFn);
+        return Constructor.filter(values, mapFn);
       });
     };
 
@@ -63,6 +71,8 @@ define("rsvp-party/rsvp-party/promise",
 
       return guarded;
     };
+
+    __exports__["default"] = Promise;
   });
 define("rsvp-party/rsvp-party/rsvp",
   ["./promise","exports"],
@@ -74,7 +84,7 @@ define("rsvp-party/rsvp-party/rsvp",
     __exports__["default"] = RSVP;
 
     // please note, these must be array of callables which return promises
-    RSVP.sequence = function(tasks) {
+    RSVP.sequence = Promise.sequence = function(tasks) {
       var length = tasks.length;
       var current = Promise.resolve();
       var results = new Array(length);
@@ -85,7 +95,6 @@ define("rsvp-party/rsvp-party/rsvp",
 
       return Promise.all(results);
     };
-
 
     // please note, these must be an object of callables which return promises
     // also dependingon the implementation this may be entirely non-deterministic

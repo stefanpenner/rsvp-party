@@ -8,7 +8,7 @@ define(
     __exports__["default"] = RSVP;
 
     // please note, these must be array of callables which return promises
-    RSVP.sequence = function(tasks) {
+    RSVP.sequence = Promise.sequence = function(tasks) {
       var length = tasks.length;
       var current = Promise.resolve();
       var results = new Array(length);
@@ -19,7 +19,6 @@ define(
 
       return Promise.all(results);
     };
-
 
     // please note, these must be an object of callables which return promises
     // also dependingon the implementation this may be entirely non-deterministic
