@@ -1,5 +1,7 @@
 "use strict";
 var _RSVP = require("rsvp")["default"] || require("rsvp");
+var o_create = require("./utils").o_create;
+var copyProperties = require("./utils").copyProperties;
 
 var _Promise = _RSVP.Promise;
 
@@ -7,10 +9,11 @@ function Promise(resolver, label) {
   this._superConstructor(resolver, label);
 }
 
-Promise.prototype = Object.create(_Promise.prototype);
+copyProperties(Promise, _Promise);
+
+Promise.prototype = o_create(_Promise.prototype);
 Promise.prototype.constructor = Promise;
 Promise.prototype._superConstructor = _Promise;
-Promise.__proto__ = _Promise;
 
 Promise.prototype.returns = function(value) {
   return this.then(function() {

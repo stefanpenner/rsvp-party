@@ -1,8 +1,9 @@
 "use strict";
 var Promise = require("./promise")["default"] || require("./promise");
+var _RSVP = require("rsvp")["default"] || require("rsvp");
+var copyProperties = require("./utils").copyProperties;
 
-function RSVP() { };
-exports["default"] = RSVP;
+var RSVP = copyProperties({}, _RSVP);
 
 // please note, these must be array of callables which return promises
 RSVP.sequence = Promise.sequence = function(tasks) {
@@ -57,3 +58,5 @@ RSVP.promiseWhile = function(condition, body) {
     loop();
   });
 };
+
+exports["default"] = RSVP;

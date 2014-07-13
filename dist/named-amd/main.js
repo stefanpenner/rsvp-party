@@ -9,10 +9,12 @@ define("rsvp-party",
     __exports__.RSVP = RSVP;
   });
 define("rsvp-party/rsvp-party/promise",
-  ["rsvp","exports"],
-  function(__dependency1__, __exports__) {
+  ["rsvp","./utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var _RSVP = __dependency1__["default"] || __dependency1__;
+    var o_create = __dependency2__.o_create;
+    var copyProperties = __dependency2__.copyProperties;
 
     var _Promise = _RSVP.Promise;
 
@@ -20,10 +22,11 @@ define("rsvp-party/rsvp-party/promise",
       this._superConstructor(resolver, label);
     }
 
-    Promise.prototype = Object.create(_Promise.prototype);
+    copyProperties(Promise, _Promise);
+
+    Promise.prototype = o_create(_Promise.prototype);
     Promise.prototype.constructor = Promise;
     Promise.prototype._superConstructor = _Promise;
-    Promise.__proto__ = _Promise;
 
     Promise.prototype.returns = function(value) {
       return this.then(function() {
@@ -75,13 +78,14 @@ define("rsvp-party/rsvp-party/promise",
     __exports__["default"] = Promise;
   });
 define("rsvp-party/rsvp-party/rsvp",
-  ["./promise","exports"],
-  function(__dependency1__, __exports__) {
+  ["./promise","rsvp","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Promise = __dependency1__["default"] || __dependency1__;
+    var _RSVP = __dependency2__["default"] || __dependency2__;
+    var copyProperties = __dependency3__.copyProperties;
 
-    function RSVP() { };
-    __exports__["default"] = RSVP;
+    var RSVP = copyProperties({}, _RSVP);
 
     // please note, these must be array of callables which return promises
     RSVP.sequence = Promise.sequence = function(tasks) {
@@ -136,4 +140,27 @@ define("rsvp-party/rsvp-party/rsvp",
         loop();
       });
     };
+
+    __exports__["default"] = RSVP;
+  });
+define("rsvp-party/rsvp-party/utils",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var o_create = (Object.create || function(object) {
+      var o = function() { };
+      o.prototype = object;
+      return o;
+    });
+    __exports__.o_create = o_create;
+    var copyProperties = function(to, from) {
+      var key;
+      for(key in from) {
+        if(from.hasOwnProperty(key) && !to.hasOwnProperty(key)) {
+          to[key] = from[key];
+        }
+      }
+      return to;
+    };
+    __exports__.copyProperties = copyProperties;
   });

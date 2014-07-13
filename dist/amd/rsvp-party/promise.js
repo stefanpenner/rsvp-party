@@ -1,8 +1,10 @@
 define(
-  ["rsvp","exports"],
-  function(__dependency1__, __exports__) {
+  ["rsvp","./utils","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var _RSVP = __dependency1__["default"] || __dependency1__;
+    var o_create = __dependency2__.o_create;
+    var copyProperties = __dependency2__.copyProperties;
 
     var _Promise = _RSVP.Promise;
 
@@ -10,10 +12,11 @@ define(
       this._superConstructor(resolver, label);
     }
 
-    Promise.prototype = Object.create(_Promise.prototype);
+    copyProperties(Promise, _Promise);
+
+    Promise.prototype = o_create(_Promise.prototype);
     Promise.prototype.constructor = Promise;
     Promise.prototype._superConstructor = _Promise;
-    Promise.__proto__ = _Promise;
 
     Promise.prototype.returns = function(value) {
       return this.then(function() {

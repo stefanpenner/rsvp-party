@@ -1,11 +1,12 @@
 define(
-  ["./promise","exports"],
-  function(__dependency1__, __exports__) {
+  ["./promise","rsvp","./utils","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
     var Promise = __dependency1__["default"] || __dependency1__;
+    var _RSVP = __dependency2__["default"] || __dependency2__;
+    var copyProperties = __dependency3__.copyProperties;
 
-    function RSVP() { };
-    __exports__["default"] = RSVP;
+    var RSVP = copyProperties({}, _RSVP);
 
     // please note, these must be array of callables which return promises
     RSVP.sequence = Promise.sequence = function(tasks) {
@@ -60,4 +61,6 @@ define(
         loop();
       });
     };
+
+    __exports__["default"] = RSVP;
   });

@@ -5,6 +5,16 @@ describe('RSVPParty.Promise', function() {
     expect(Promise).to.exist;
   });
 
+  describe('properties are copied from RSVP.Promise', function() {
+    var key;
+
+    for(key in RSVP.Promise) {
+      it(key + ' should be defined', function() {
+        expect(Promise[key]).to.exist;
+      });
+    }
+  });
+
   describe('methods exist on instantiated promise', function() {
     var promise;
     beforeEach(function() {
@@ -33,6 +43,10 @@ describe('RSVPParty.Promise', function() {
 
     it('guard - should be defined', function() {
       expect(promise.guard).to.exist;
+    });
+
+    it('then - should be defined', function() {
+      expect(promise.then).to.exist;
     });
   });
 })
