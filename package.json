@@ -2,9 +2,13 @@
   "name": "rsvp-party",
   "version": "0.0.0",
   "description": "rsvp-party ==========",
-  "main": "index.js",
+  "main": "dist/cjs/rsvp-party.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/testem/testem.js",
+    "test-ci": "node_modules/testem/testem.js ci",
+    "mocha": "node_modules/mocha/bin/mocha --reporter spec --require tests/_helper.js tests/*.js tests/**/*.js",
+    "build": "rm -rf dist && BROCCOLI_ENV=production node_modules/broccoli-cli/bin/broccoli build dist",
+    "build-test": "rm -rf test && node_modules/broccoli-cli/bin/broccoli build test"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,19 @@
   "bugs": {
     "url": "https://github.com/stefanpenner/rsvp-party/issues"
   },
-  "homepage": "https://github.com/stefanpenner/rsvp-party"
+  "homepage": "https://github.com/stefanpenner/rsvp-party",
+  "devDependencies": {
+    "broccoli-cli": "0.0.1",
+    "broccoli": "^0.12.3",
+    "broccoli-dist-es6-module": "^0.2.0",
+    "chai": "^1.9.1",
+    "mocha": "^1.20.1",
+    "testem": "^0.6.16",
+    "rsvp": "^3.0.9",
+    "broccoli-merge-trees": "^0.1.4",
+    "broccoli-static-compiler": "^0.1.4"
+  },
+  "dependencies": {
+    "broccoli-env": "0.0.1"
+  }
 }
