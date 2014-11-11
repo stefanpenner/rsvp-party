@@ -5,7 +5,7 @@ var o_create = (Object.create || function(object) {
   return o;
 });
 exports.o_create = o_create;
-var copyProperties = function(to, from) {
+var assign = function(to, from) {
   var key;
   for(key in from) {
     if(from.hasOwnProperty(key) && !to.hasOwnProperty(key)) {
@@ -14,4 +14,4 @@ var copyProperties = function(to, from) {
   }
   return to;
 };
-exports.copyProperties = copyProperties;
+exports.assign = assign;

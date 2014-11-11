@@ -14,7 +14,7 @@ define("rsvp-party/rsvp-party/promise",
     "use strict";
     var _RSVP = __dependency1__["default"] || __dependency1__;
     var o_create = __dependency2__.o_create;
-    var copyProperties = __dependency2__.copyProperties;
+    var assign = __dependency2__.assign;
 
     var _Promise = _RSVP.Promise;
 
@@ -68,7 +68,7 @@ define("rsvp-party/rsvp-party/promise",
     Promise.prototype.guard = function(test) {
       var guarded = this['finally'](function(){
         if (!test()) {
-          guarded._subscribers = 0;
+          guarded._subscribers.length = 0;
         }
       });
 
@@ -83,9 +83,9 @@ define("rsvp-party/rsvp-party/rsvp",
     "use strict";
     var Promise = __dependency1__["default"] || __dependency1__;
     var _RSVP = __dependency2__["default"] || __dependency2__;
-    var copyProperties = __dependency3__.copyProperties;
+    var assign = __dependency3__.assign;
 
-    var RSVP = copyProperties({}, _RSVP);
+    var RSVP = assign({}, _RSVP);
 
     // please note, these must be array of callables which return promises
     RSVP.sequence = Promise.sequence = function(tasks) {
@@ -153,7 +153,7 @@ define("rsvp-party/rsvp-party/utils",
       return o;
     });
     __exports__.o_create = o_create;
-    var copyProperties = function(to, from) {
+    var assign = function(to, from) {
       var key;
       for(key in from) {
         if(from.hasOwnProperty(key) && !to.hasOwnProperty(key)) {
@@ -162,5 +162,5 @@ define("rsvp-party/rsvp-party/utils",
       }
       return to;
     };
-    __exports__.copyProperties = copyProperties;
+    __exports__.assign = assign;
   });

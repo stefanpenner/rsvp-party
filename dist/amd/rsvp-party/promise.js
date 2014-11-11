@@ -4,7 +4,7 @@ define(
     "use strict";
     var _RSVP = __dependency1__["default"] || __dependency1__;
     var o_create = __dependency2__.o_create;
-    var copyProperties = __dependency2__.copyProperties;
+    var assign = __dependency2__.assign;
 
     var _Promise = _RSVP.Promise;
 
@@ -58,7 +58,7 @@ define(
     Promise.prototype.guard = function(test) {
       var guarded = this['finally'](function(){
         if (!test()) {
-          guarded._subscribers = 0;
+          guarded._subscribers.length = 0;
         }
       });
 

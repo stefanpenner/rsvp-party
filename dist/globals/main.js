@@ -9,7 +9,7 @@ exports.RSVP = RSVP;
 "use strict";
 var _RSVP = window.RSVP["default"] || window.RSVP;
 var o_create = _dereq_("./utils").o_create;
-var copyProperties = _dereq_("./utils").copyProperties;
+var assign = _dereq_("./utils").assign;
 
 var _Promise = _RSVP.Promise;
 
@@ -63,7 +63,7 @@ Promise.prototype.filter = function(mapFn) {
 Promise.prototype.guard = function(test) {
   var guarded = this['finally'](function(){
     if (!test()) {
-      guarded._subscribers = 0;
+      guarded._subscribers.length = 0;
     }
   });
 
@@ -75,9 +75,9 @@ exports["default"] = Promise;
 "use strict";
 var Promise = _dereq_("./promise")["default"] || _dereq_("./promise");
 var _RSVP = window.RSVP["default"] || window.RSVP;
-var copyProperties = _dereq_("./utils").copyProperties;
+var assign = _dereq_("./utils").assign;
 
-var RSVP = copyProperties({}, _RSVP);
+var RSVP = assign({}, _RSVP);
 
 // please note, these must be array of callables which return promises
 RSVP.sequence = Promise.sequence = function(tasks) {
@@ -142,7 +142,7 @@ var o_create = (Object.create || function(object) {
   return o;
 });
 exports.o_create = o_create;
-var copyProperties = function(to, from) {
+var assign = function(to, from) {
   var key;
   for(key in from) {
     if(from.hasOwnProperty(key) && !to.hasOwnProperty(key)) {
@@ -151,7 +151,7 @@ var copyProperties = function(to, from) {
   }
   return to;
 };
-exports.copyProperties = copyProperties;
+exports.assign = assign;
 },{}]},{},[1])
 (1)
 });

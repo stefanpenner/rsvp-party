@@ -4,9 +4,9 @@ define(
     "use strict";
     var Promise = __dependency1__["default"] || __dependency1__;
     var _RSVP = __dependency2__["default"] || __dependency2__;
-    var copyProperties = __dependency3__.copyProperties;
+    var assign = __dependency3__.assign;
 
-    var RSVP = copyProperties({}, _RSVP);
+    var RSVP = assign({}, _RSVP);
 
     // please note, these must be array of callables which return promises
     RSVP.sequence = Promise.sequence = function(tasks) {

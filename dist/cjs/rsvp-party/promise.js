@@ -1,7 +1,7 @@
 "use strict";
 var _RSVP = require("rsvp")["default"] || require("rsvp");
 var o_create = require("./utils").o_create;
-var copyProperties = require("./utils").copyProperties;
+var assign = require("./utils").assign;
 
 var _Promise = _RSVP.Promise;
 
@@ -55,7 +55,7 @@ Promise.prototype.filter = function(mapFn) {
 Promise.prototype.guard = function(test) {
   var guarded = this['finally'](function(){
     if (!test()) {
-      guarded._subscribers = 0;
+      guarded._subscribers.length = 0;
     }
   });
 

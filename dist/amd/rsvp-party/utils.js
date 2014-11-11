@@ -8,7 +8,7 @@ define(
       return o;
     });
     __exports__.o_create = o_create;
-    var copyProperties = function(to, from) {
+    var assign = function(to, from) {
       var key;
       for(key in from) {
         if(from.hasOwnProperty(key) && !to.hasOwnProperty(key)) {
@@ -17,5 +17,5 @@ define(
       }
       return to;
     };
-    __exports__.copyProperties = copyProperties;
+    __exports__.assign = assign;
   });
