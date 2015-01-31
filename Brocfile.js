@@ -16,8 +16,8 @@ output.push(to5(find(src, '!**/*-test.js')));
 env('development', function() {
   output.push(to5(find(src, '**/*-test.js')));
 
-  deps.push(mv(find('node_modules/rsvp/dist/{rsvp.js}'), 'node_modules/rsvp/dist/', '/rsvp/'));
-  deps.push(mv(find('node_modules/chai/{chai.js}'),      'node_modules/chai/',      '/chai/'));
+  output.push(mv(find('node_modules/rsvp/dist/{rsvp.js}'), 'node_modules/rsvp/dist/', '/rsvp/'));
+  output.push(mv(find('node_modules/chai/{chai.js}'),      'node_modules/chai/',      '/chai/'));
 });
 
 module.exports = find(output);
