@@ -1,33 +1,19 @@
-var mergeTrees = require('broccoli-merge-trees');
-var dist       = require('broccoli-dist-es6-module');
-var pickFiles  = require('broccoli-static-compiler');
-var env        = require('broccoli-env').getEnv();
+var to5  = require('broccoli-6to5-transpiler');
+var stew = require('broccoli-stew');
+
+var log  = stew.log;
+var find = stew.find;
+var mv = stew.mv;
+var env  = stew.env;
 
 var sourceTrees = [];
 
-if(env === 'development') {
-  var rsvp = pickFiles('node_modules/rsvp/dist', {
-    srcDir: '/',
-    files: ['rsvp.js'],
-    destDir: '/rsvp'
-  });
-  sourceTrees.push(rsvp);
-  var chai = pickFiles('node_modules/chai', {
-    srcDir: '/',
-    files: ['chai.js'],
-    destDir: '/chai'
-  });
-  sourceTrees.push(chai);
-}
-
-var js = dist('lib', {
-  main: 'rsvp-party',
-  global: 'RSVPParty',
-  packageName: 'rsvp-party',
-  shim: {
-    'rsvp': 'RSVP'
-  }
+env('development', function() {
+  sourceTrees.push(mv(find('node_modules/rsvp/dist/{rsvp.js}'), 'node_modules/rsvp/dist/', '/rsvp/'));
+  sourceTrees.push(mv(find('node_modules/chai/{chai.js}'),      'node_modules/chai/',      '/chai/'));
+  sourceTrees.push(to5(find('tests/**/*.js')));
 });
-sourceTrees.push(js);
 
-module.exports = mergeTrees(sourceTrees, { overwrite: true });
+sourceTrees.push(to5(find('lib/**/*.js')));
+
+module.exports = log(find(sourceTrees));
