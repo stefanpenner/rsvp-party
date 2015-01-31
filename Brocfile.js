@@ -3,17 +3,21 @@ var stew = require('broccoli-stew');
 
 var log  = stew.log;
 var find = stew.find;
-var mv = stew.mv;
+var mv   = stew.mv;
 var env  = stew.env;
 
-var sourceTrees = [];
+var output = [];
+var deps   = [];
+
+var src  = find('lib/**/*.js');
+
+output.push(to5(find(src, '!**/*-test.js')));
 
 env('development', function() {
-  sourceTrees.push(mv(find('node_modules/rsvp/dist/{rsvp.js}'), 'node_modules/rsvp/dist/', '/rsvp/'));
-  sourceTrees.push(mv(find('node_modules/chai/{chai.js}'),      'node_modules/chai/',      '/chai/'));
-  sourceTrees.push(to5(find('tests/**/*.js')));
+  output.push(to5(find(src, '**/*-test.js')));
+
+  deps.push(mv(find('node_modules/rsvp/dist/{rsvp.js}'), 'node_modules/rsvp/dist/', '/rsvp/'));
+  deps.push(mv(find('node_modules/chai/{chai.js}'),      'node_modules/chai/',      '/chai/'));
 });
 
-sourceTrees.push(to5(find('lib/**/*.js')));
-
-module.exports = log(find(sourceTrees));
+module.exports = find(output);
