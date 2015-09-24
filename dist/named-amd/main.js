@@ -22,7 +22,7 @@ define("rsvp-party/rsvp-party/promise",
       this._superConstructor(resolver, label);
     }
 
-    copyProperties(Promise, _Promise);
+    assign(Promise, _Promise);
 
     Promise.prototype = o_create(_Promise.prototype);
     Promise.prototype.constructor = Promise;
