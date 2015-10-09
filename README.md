@@ -14,20 +14,26 @@ extensions:
 * `Promise.prototype.map`
 * `Promise.prototype.filter`
 * `Promise.prototype.guard`
-* `Promise.prototype.reduce`
-* ... get/set ?
 
 utilities:
 ----------
-* `Promise.sequence`
-* `Promise.while`
-* ...
+* `RSVP.sequence`
+* `RSVP.hashSequence`
+* `RSVP.promiseWhile`
+
+todos:
+----------
+* `Promise.prototype.reduce`
+* ... get/set ?
+
 
 usage:
 ----------
 
-var RSVP = require('rsvp-party');
+```
+var RSVP = require('rsvp-party').RSVP;
 var Promise = require('rsvp-party').Promise;
+```
 
 Running Tests:
 --------------
